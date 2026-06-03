@@ -1,0 +1,11 @@
+2026-06-02 04:56:23,588 | INFO     | AI_ENGINE | ================================================================================
+2026-06-02 04:56:23,588 | INFO     | AI_ENGINE | ⚡ AI ENGINE STARTED (v2)
+2026-06-02 04:56:23,588 | INFO     | AI_ENGINE |    Firebase: https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app
+2026-06-02 04:56:23,589 | INFO     | AI_ENGINE |    Poll interval: 5s
+2026-06-02 04:56:23,589 | INFO     | AI_ENGINE |    Write interval: 10s
+2026-06-02 04:56:23,589 | INFO     | AI_ENGINE |    Window: 720 samples (~60 min)
+2026-06-02 04:56:23,589 | INFO     | AI_ENGINE |    Anomaly threshold: 2.5
+2026-06-02 04:56:23,589 | INFO     | AI_ENGINE |    ARIMA available: False
+2026-06-02 04:56:23,589 | INFO     | AI_ENGINE | ================================================================================
+2026-06-02 04:56:24,431 | WARNING  | AI_ENGINE | [FB GET] HTTP 401 on /live (attempt 1/3)
+2026-06-02 04:56:26,852 | WARNING  | AI_ENGINE | [FB GET] HTTP 401 on /live (attempt 2/3)

@@ -1,0 +1,114 @@
+[debug] [2026-05-29T14:39:23.078Z] ----------------------------------------------------------------------
+[debug] [2026-05-29T14:39:23.082Z] Command:       /home/nujoka/.nvm/versions/node/v20.20.1/bin/node /usr/bin/firebase deploy --only database --project smart-energy-monitor-5b72b --debug
+[debug] [2026-05-29T14:39:23.083Z] CLI Version:   15.1.0
+[debug] [2026-05-29T14:39:23.083Z] Platform:      linux
+[debug] [2026-05-29T14:39:23.084Z] Node Version:  v20.20.1
+[debug] [2026-05-29T14:39:23.084Z] Time:          Fri May 29 2026 15:39:23 GMT+0100 (West Africa Time)
+[debug] [2026-05-29T14:39:23.084Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-05-29T14:39:26.111Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-29T14:39:26.115Z] > authorizing via signed-in user (nujoka1@gmail.com)
+[debug] [2026-05-29T14:39:26.120Z] [iam] checking project smart-energy-monitor-5b72b for permissions ["firebase.projects.get","firebasedatabase.instances.update"]
+[debug] [2026-05-29T14:39:26.124Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:39:26.129Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:39:26.141Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/smart-energy-monitor-5b72b:testIamPermissions [none]
+[debug] [2026-05-29T14:39:26.142Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/smart-energy-monitor-5b72b:testIamPermissions x-goog-quota-user=projects/smart-energy-monitor-5b72b
+[debug] [2026-05-29T14:39:26.143Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/smart-energy-monitor-5b72b:testIamPermissions {"permissions":["firebase.projects.get","firebasedatabase.instances.update"]}
+[debug] [2026-05-29T14:39:32.612Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/smart-energy-monitor-5b72b:testIamPermissions 200
+[debug] [2026-05-29T14:39:32.613Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/smart-energy-monitor-5b72b:testIamPermissions {"permissions":["firebase.projects.get","firebasedatabase.instances.update"]}
+[debug] [2026-05-29T14:39:32.617Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:39:32.618Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:39:32.620Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/smart-energy-monitor-5b72b [none]
+[debug] [2026-05-29T14:39:33.393Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/smart-energy-monitor-5b72b 200
+[debug] [2026-05-29T14:39:33.395Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/smart-energy-monitor-5b72b {"projectId":"smart-energy-monitor-5b72b","projectNumber":"954126965459","displayName":"smart-energy-monitor","name":"projects/smart-energy-monitor-5b72b","resources":{"hostingSite":"smart-energy-monitor-5b72b","realtimeDatabaseInstance":"smart-energy-monitor-5b72b-default-rtdb"},"state":"ACTIVE","etag":"1_456660ae-68f2-4912-8bbe-4d582dbfeeb9"}
+[info] 
+[info] === Deploying to 'smart-energy-monitor-5b72b'...
+[info] 
+[info] i  deploying database 
+[info] i  database: checking rules syntax... 
+[debug] [2026-05-29T14:39:33.400Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:39:33.400Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:39:33.401Z] >>> [apiv2][query] GET https://firebasedatabase.googleapis.com/v1beta/projects/smart-energy-monitor-5b72b/locations/-/instances/smart-energy-monitor-5b72b-default-rtdb [none]
+[debug] [2026-05-29T14:39:39.839Z] <<< [apiv2][status] GET https://firebasedatabase.googleapis.com/v1beta/projects/smart-energy-monitor-5b72b/locations/-/instances/smart-energy-monitor-5b72b-default-rtdb 200
+[debug] [2026-05-29T14:39:39.839Z] <<< [apiv2][body] GET https://firebasedatabase.googleapis.com/v1beta/projects/smart-energy-monitor-5b72b/locations/-/instances/smart-energy-monitor-5b72b-default-rtdb {"name":"projects/954126965459/locations/europe-west1/instances/smart-energy-monitor-5b72b-default-rtdb","project":"projects/954126965459","databaseUrl":"https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app","type":"DEFAULT_DATABASE","state":"ACTIVE"}
+[debug] [2026-05-29T14:39:39.842Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:39:39.842Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:39:39.844Z] >>> [apiv2][query] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json dryRun=true
+[debug] [2026-05-29T14:39:39.846Z] >>> [apiv2][body] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json "{\n  \"rules\": {\n    \"live\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    },\n    \"history\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    },\n    \"relay_commands\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    },\n    \"events\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    }\n  }\n}\n"
+[debug] [2026-05-29T14:39:45.431Z] <<< [apiv2][status] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json 200
+[debug] [2026-05-29T14:39:45.431Z] <<< [apiv2][body] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json {"status":"ok"}
+[info] ✔  database: rules syntax for database smart-energy-monitor-5b72b-default-rtdb is valid 
+[info] i  database: releasing rules... 
+[debug] [2026-05-29T14:39:45.433Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:39:45.434Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:39:45.435Z] >>> [apiv2][query] GET https://firebasedatabase.googleapis.com/v1beta/projects/smart-energy-monitor-5b72b/locations/-/instances/smart-energy-monitor-5b72b-default-rtdb [none]
+[debug] [2026-05-29T14:39:46.707Z] <<< [apiv2][status] GET https://firebasedatabase.googleapis.com/v1beta/projects/smart-energy-monitor-5b72b/locations/-/instances/smart-energy-monitor-5b72b-default-rtdb 200
+[debug] [2026-05-29T14:39:46.708Z] <<< [apiv2][body] GET https://firebasedatabase.googleapis.com/v1beta/projects/smart-energy-monitor-5b72b/locations/-/instances/smart-energy-monitor-5b72b-default-rtdb {"name":"projects/954126965459/locations/europe-west1/instances/smart-energy-monitor-5b72b-default-rtdb","project":"projects/954126965459","databaseUrl":"https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app","type":"DEFAULT_DATABASE","state":"ACTIVE"}
+[debug] [2026-05-29T14:39:46.708Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:39:46.709Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:39:46.709Z] >>> [apiv2][query] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json 
+[debug] [2026-05-29T14:39:46.709Z] >>> [apiv2][body] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json "{\n  \"rules\": {\n    \"live\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    },\n    \"history\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    },\n    \"relay_commands\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    },\n    \"events\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    }\n  }\n}\n"
+[debug] [2026-05-29T14:39:47.940Z] <<< [apiv2][status] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json 200
+[debug] [2026-05-29T14:39:47.940Z] <<< [apiv2][body] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json {"status":"ok"}
+[info] ✔  database: rules for database smart-energy-monitor-5b72b-default-rtdb released successfully 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/smart-energy-monitor-5b72b/overview
+[debug] [2026-05-29T14:42:58.288Z] ----------------------------------------------------------------------
+[debug] [2026-05-29T14:42:58.294Z] Command:       /home/nujoka/.nvm/versions/node/v20.20.1/bin/node /usr/bin/firebase deploy --only database --project smart-energy-monitor-5b72b --debug
+[debug] [2026-05-29T14:42:58.294Z] CLI Version:   15.1.0
+[debug] [2026-05-29T14:42:58.295Z] Platform:      linux
+[debug] [2026-05-29T14:42:58.295Z] Node Version:  v20.20.1
+[debug] [2026-05-29T14:42:58.295Z] Time:          Fri May 29 2026 15:42:58 GMT+0100 (West Africa Time)
+[debug] [2026-05-29T14:42:58.296Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-05-29T14:43:00.371Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-29T14:43:00.373Z] > authorizing via signed-in user (nujoka1@gmail.com)
+[debug] [2026-05-29T14:43:00.374Z] [iam] checking project smart-energy-monitor-5b72b for permissions ["firebase.projects.get","firebasedatabase.instances.update"]
+[debug] [2026-05-29T14:43:00.377Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:43:00.377Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:43:00.380Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/smart-energy-monitor-5b72b:testIamPermissions [none]
+[debug] [2026-05-29T14:43:00.381Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/smart-energy-monitor-5b72b:testIamPermissions x-goog-quota-user=projects/smart-energy-monitor-5b72b
+[debug] [2026-05-29T14:43:00.383Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/smart-energy-monitor-5b72b:testIamPermissions {"permissions":["firebase.projects.get","firebasedatabase.instances.update"]}
+[debug] [2026-05-29T14:43:01.270Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/smart-energy-monitor-5b72b:testIamPermissions 200
+[debug] [2026-05-29T14:43:01.271Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/smart-energy-monitor-5b72b:testIamPermissions {"permissions":["firebase.projects.get","firebasedatabase.instances.update"]}
+[debug] [2026-05-29T14:43:01.272Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:43:01.272Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:43:01.273Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/smart-energy-monitor-5b72b [none]
+[debug] [2026-05-29T14:43:02.037Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/smart-energy-monitor-5b72b 200
+[debug] [2026-05-29T14:43:02.038Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/smart-energy-monitor-5b72b {"projectId":"smart-energy-monitor-5b72b","projectNumber":"954126965459","displayName":"smart-energy-monitor","name":"projects/smart-energy-monitor-5b72b","resources":{"hostingSite":"smart-energy-monitor-5b72b","realtimeDatabaseInstance":"smart-energy-monitor-5b72b-default-rtdb"},"state":"ACTIVE","etag":"1_456660ae-68f2-4912-8bbe-4d582dbfeeb9"}
+[info] 
+[info] === Deploying to 'smart-energy-monitor-5b72b'...
+[info] 
+[info] i  deploying database 
+[info] i  database: checking rules syntax... 
+[debug] [2026-05-29T14:43:02.044Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:43:02.044Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:43:02.045Z] >>> [apiv2][query] GET https://firebasedatabase.googleapis.com/v1beta/projects/smart-energy-monitor-5b72b/locations/-/instances/smart-energy-monitor-5b72b-default-rtdb [none]
+[debug] [2026-05-29T14:43:03.365Z] <<< [apiv2][status] GET https://firebasedatabase.googleapis.com/v1beta/projects/smart-energy-monitor-5b72b/locations/-/instances/smart-energy-monitor-5b72b-default-rtdb 200
+[debug] [2026-05-29T14:43:03.365Z] <<< [apiv2][body] GET https://firebasedatabase.googleapis.com/v1beta/projects/smart-energy-monitor-5b72b/locations/-/instances/smart-energy-monitor-5b72b-default-rtdb {"name":"projects/954126965459/locations/europe-west1/instances/smart-energy-monitor-5b72b-default-rtdb","project":"projects/954126965459","databaseUrl":"https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app","type":"DEFAULT_DATABASE","state":"ACTIVE"}
+[debug] [2026-05-29T14:43:03.368Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:43:03.368Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:43:03.369Z] >>> [apiv2][query] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json dryRun=true
+[debug] [2026-05-29T14:43:03.370Z] >>> [apiv2][body] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json "{\n  \"rules\": {\n    \".read\": \"auth != null\",\n    \".write\": \"auth != null\",\n    \"live\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    },\n    \"history\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    },\n    \"relay_commands\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    },\n    \"events\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    }\n  }\n}\n"
+[debug] [2026-05-29T14:43:04.037Z] <<< [apiv2][status] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json 200
+[debug] [2026-05-29T14:43:04.038Z] <<< [apiv2][body] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json {"status":"ok"}
+[info] ✔  database: rules syntax for database smart-energy-monitor-5b72b-default-rtdb is valid 
+[info] i  database: releasing rules... 
+[debug] [2026-05-29T14:43:04.041Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:43:04.041Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:43:04.042Z] >>> [apiv2][query] GET https://firebasedatabase.googleapis.com/v1beta/projects/smart-energy-monitor-5b72b/locations/-/instances/smart-energy-monitor-5b72b-default-rtdb [none]
+[debug] [2026-05-29T14:43:04.429Z] <<< [apiv2][status] GET https://firebasedatabase.googleapis.com/v1beta/projects/smart-energy-monitor-5b72b/locations/-/instances/smart-energy-monitor-5b72b-default-rtdb 200
+[debug] [2026-05-29T14:43:04.430Z] <<< [apiv2][body] GET https://firebasedatabase.googleapis.com/v1beta/projects/smart-energy-monitor-5b72b/locations/-/instances/smart-energy-monitor-5b72b-default-rtdb {"name":"projects/954126965459/locations/europe-west1/instances/smart-energy-monitor-5b72b-default-rtdb","project":"projects/954126965459","databaseUrl":"https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app","type":"DEFAULT_DATABASE","state":"ACTIVE"}
+[debug] [2026-05-29T14:43:04.430Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:43:04.431Z] Checked if tokens are valid: true, expires at: 1780067715098
+[debug] [2026-05-29T14:43:04.432Z] >>> [apiv2][query] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json 
+[debug] [2026-05-29T14:43:04.433Z] >>> [apiv2][body] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json "{\n  \"rules\": {\n    \".read\": \"auth != null\",\n    \".write\": \"auth != null\",\n    \"live\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    },\n    \"history\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    },\n    \"relay_commands\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    },\n    \"events\": {\n      \".read\": \"auth != null\",\n      \".write\": \"auth != null\"\n    }\n  }\n}\n"
+[debug] [2026-05-29T14:43:04.809Z] <<< [apiv2][status] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json 200
+[debug] [2026-05-29T14:43:04.809Z] <<< [apiv2][body] PUT https://smart-energy-monitor-5b72b-default-rtdb.europe-west1.firebasedatabase.app/.settings/rules.json {"status":"ok"}
+[info] ✔  database: rules for database smart-energy-monitor-5b72b-default-rtdb released successfully 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/smart-energy-monitor-5b72b/overview

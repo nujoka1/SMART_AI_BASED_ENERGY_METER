@@ -1,0 +1,22 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "live": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "history": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "relay_commands": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "events": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}

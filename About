@@ -1,0 +1,315 @@
+I understand your question. Let me explain **how the relay switching mechanism works** in your Smart Energy Monitoring system — both the **hardware side** and the **firmware logic side**.Now let me create a comprehensive diagram explaining relay switching:Now let me explain the switching mechanism in detail:
+
+## 🔌 **How Relay Switching Works — Complete Technical Breakdown**
+
+Your system uses **active-LOW relay logic** with a **priority-ordered state machine**. Let me break down exactly what happens:
+
+---
+
+### **1. Hardware Side: The Relay Module**
+
+Your **4-channel opto-isolated relay module** works like this:
+
+```
+┌─────────────────────┐
+│  ESP32 GPIO (3.3V)  │  HIGH (3.3V)  → Relay OFF → Load is ON
+│                     │  LOW (0V)     → Relay ON  → Load is OFF
+│  GPIO26 (Zone 1)    │
+│  GPIO27 (Zone 2)    │
+│  GPIO14 (Zone 3)    │
+│  GPIO12 (Zone 4)    │
+└─────────────────────┘
+         ↓
+   [Optocoupler]  ← Provides galvanic isolation
+    (LED flashes)     (protects ESP32 from back-EMF spikes)
+         ↓
+   [Relay coil]   ← Electromagnet pulls metal contacts
+         ↓
+   [AC Load]      ← 220V AC equipment (AC unit, water heater, etc.)
+```
+
+**Why active-LOW?**
+- **Safe default on boot**: If your firmware crashes, all relays default to OFF (they lose power), which is the safe state
+- **Standard practice**: 99% of relay modules use this logic
+
+---
+
+### **2. Firmware Side: The Non-Blocking State Machine**
+
+Your ESP32 firmware runs a **5-task non-blocking loop**. Every **2 seconds**, it does this:
+
+```
+Read PZEM Sensor
+     ↓
+Classify Load (is it > 2000W?)
+     ↓
+Update Baseline (rolling average for anomaly detection)
+     ↓
+RUN RELAY STATE MACHINE (for each zone)
+     ↓
+Push to Firebase
+```
+
+The **relay state machine** for each zone has **4 states**:
+
+#### **State 1: MONITORING** (normal operation)
+```
+Current Power < 2000W
+├─ GPIO = HIGH (relay OFF, load is ON/energised)
+├─ Check every 2 seconds
+└─ If power exceeds threshold → go to CONFIRMING
+```
+
+**Why we check every 2 seconds?**
+- PZEM reads are every 2 seconds (hardware limitation)
+- No point checking faster than sensor data arrives
+- 2 seconds is fast enough for energy management decisions
+
+---
+
+#### **State 2: CONFIRMING** (verification)
+```
+Power > 2000W confirmed
+├─ Start 10-second countdown
+├─ At t+2s, t+4s, t+6s, t+8s: RE-CHECK power level
+├─ If power drops below 2000W anytime → reset timer, go back to MONITORING
+│  (this prevents false trips from momentary spikes like motor inrush)
+└─ If timer reaches 10 seconds → trip the relay
+```
+
+**Why 10 seconds?**
+- Your firmware code: `#define CONFIRM_MS 10000`
+- Motor inrush currents last ~1-2 seconds → 10s is safe
+- Quick enough to prevent energy waste
+- Long enough to avoid nuisance trips
+
+**Here's the actual firmware code that does this:**
+
+```cpp
+if (live.w > THRESH_W) {
+  // Start confirmation timer on FIRST threshold breach
+  if (zones[z].overSince == 0) 
+    zones[z].overSince = now;
+
+  // Wait for confirmation hold period
+  if (now - zones[z].overSince < CONFIRM_MS) {
+    Serial.printf("Zone %d: %.0fW > 2000W — hold %lus/%lus\n",
+      z + 1, live.w, 
+      (now - zones[z].overSince) / 1000,  // elapsed seconds
+      CONFIRM_MS / 1000);                  // total seconds needed
+    continue;
+  }
+  // If we get here, 10 seconds have ACTUALLY passed
+  // Now we trip the relay
+}
+```
+
+---
+
+#### **State 3: TRIPPED** (load shedding)
+```
+Timer expired at exactly 10 seconds
+├─ Execute: digitalWrite(GPIO_PIN, LOW)  
+│  (This energises the relay coil, opening the AC load contacts)
+├─ Load loses live wire → AC unit stops drawing power
+├─ Start 30-second cooldown counter
+└─ Log event to Firebase
+```
+
+**What happens at the relay:**
+```
+GPIO LOW (0V) → Optocoupler LED lights
+             → Phototransistor sees light
+             → Relay coil energises
+             → Electromagnet pulls metal switch arm
+             → Load contacts open (NC → open)
+             → AC unit powered off
+```
+
+**Logging to Firebase:**
+```cpp
+fbPost("/events", 
+  "{\"zone\":1,\"event\":\"TRIP\",\"w\":2341.2,\"ts\":1704067500000}");
+```
+This record appears in your dashboard event log.
+
+---
+
+#### **State 4: COOLDOWN** (relay protection)
+```
+Post-trip cooldown active
+├─ Duration: 30 seconds (#define COOL_MS 30000)
+├─ Ignore all new power readings
+├─ NO relay re-arm attempts, even if power is still high
+├─ After 30s → go back to MONITORING
+└─ Reason: Protect relay contacts from mechanical chatter
+           (opening/closing rapidly causes wear & EMI)
+```
+
+**Why 30 seconds?**
+- Mechanical relays have contact "bounce" — they vibrate slightly when switching
+- If we re-triggered after 1 second, we'd be: trip → reset → trip → reset → ...
+- This wears out the relay and creates electrical noise
+- 30 seconds is industry standard for load management systems
+- By then, whatever caused the overload should be resolved
+
+---
+
+### **3. Priority Ordering** (The "Smart" Part)
+
+When multiple zones could be tripped simultaneously, your firmware uses **priority ordering**:
+
+```
+Zone Priority Matrix:
+┌──────────┬──────────┬──────────┐
+│ Zone 1   │ Zone 2   │ Zone 4   │
+│ AC unit  │ Heater   │ Lighting │
+│ Priority │ Priority │ Priority │
+│ 1 (trip  │ 2 (trip  │ 3 (trip  │
+│  FIRST)  │  SECOND) │  THIRD)  │
+└──────────┴──────────┴──────────┘
+
+Zone 3 (Sockets): NEVER auto-trip (essential loads)
+```
+
+**The logic:**
+```cpp
+// Only trip if higher-priority zones already tripped
+bool higherClear = true;
+for (int j = 0; j < z; j++) {
+  if (!zones[j].tripped && !zones[j].manual) 
+    higherClear = false;  // Zone j is higher priority and NOT tripped yet
+}
+
+if (higherClear) {
+  // All higher-priority zones either tripped OR manual
+  // NOW we can trip this zone
+  digitalWrite(relayPin, LOW);
+  zones[z].tripped = true;
+}
+```
+
+**Real-world example:**
+```
+Scenario: Total power = 2100W (all zones active)
+
+t=0-10s:   MONITORING → Zone 1 confirms → TRIPPED
+           Turns off AC unit (saves ~1500W immediately)
+           
+If power still > 2000W at t=30s (after cooldown):
+t=30-40s:  Zone 2 confirms → TRIPPED  
+           Turns off water heater (saves ~3000W)
+           
+If power STILL > 2000W:
+t=60-70s:  Zone 4 confirms → TRIPPED
+           Turns off lighting (saves ~200W)
+
+Zone 3 (sockets with computers) STAYS ON always
+→ User has light and power to laptop even in critical situation
+```
+
+---
+
+### **4. Dashboard → ESP32 Command Flow**
+
+When you toggle a relay from the web dashboard:
+
+```
+1. You click toggle in React dashboard
+   └─ sendRelayCommand(1, false)  // Turn OFF Zone 1
+
+2. Firebase receives: /relay_commands/z1 = false
+
+3. ESP32 polls every 3 seconds:
+   GET /relay_commands.json
+   
+4. Firmware parses JSON:
+   if (desired != cmdCache[1]) {
+     zones[0].manual = true;     // Flag as manual override
+     zones[0].tripped = false;   // Clear auto-trip flag
+     setRelay(1, false, "DASHBOARD_CMD");
+     digitalWrite(GPIO26, LOW);  // Execute: load OFF
+   }
+
+5. Event logged to Firebase:
+   /events → {zone: 1, event: "MANUAL_OFF", w: 891.4, ts: ...}
+
+6. Dashboard event log updates in real-time
+   showing the manual command was received
+```
+
+**Max command latency:** 3 seconds (polling interval)
+
+---
+
+### **5. The Complete Timeline Example**
+
+```
+Real-world scenario: AC unit in unoccupied office
+
+t=0:00    | Power: 80W (lights, routers)
+          | State: MONITORING
+          |
+t=5:00    | Someone leaves lights on + AC at full blast
+          | Power: 2500W spike
+          | State: MONITORING → CONFIRMING
+          | Serial: "Zone 1: 2500W > 2000W — hold 2s/10s"
+          |
+t=6:00    | Power still 2400W (confirmed, not a transient)
+          | Serial: "Zone 1: 2400W > 2000W — hold 4s/10s"
+          |
+t=8:00    | Power: 2350W
+          | Serial: "Zone 1: 2350W > 2000W — hold 6s/10s"
+          |
+t=10:00   | 10-second hold expired → TRIP
+          | GPIO26 → LOW (0V)
+          | Relay energised, AC load contacts open
+          | Serial: "[RELAY] Zone 1 (TRIP) → OFF | Reason: AUTO_TRIP"
+          | Firebase /events: {zone: 1, event: "TRIP", w: 2350.0}
+          | Power drops to 150W immediately
+          |
+t=10:00-40:00 | COOLDOWN period
+          | Relay locked in OFF state
+          | Even if power jumps back up, won't re-trip
+          |
+t=40:00   | Cooldown ends → back to MONITORING
+          | If power < 2000W (it is), stays MONITORING
+          | AC unit remains off (needs manual reset from dashboard)
+          |
+User receives SMS alert (if subscribed):
+  "ALERT: Smart Energy Monitor
+   Anomaly detected! Power: 2350W
+   Z-score: 4.23
+   Status: Critical threshold"
+```
+
+---
+
+### **6. Dashboard Event Log Shows:**
+
+```
+[40:32] Zone 1 (AC unit) — TRIP — 2350.0W
+[40:00] Cooldown complete — Zone 1 re-armed
+[User toggles ON from dashboard]
+[05:00] Zone 1 (AC unit) — MANUAL_ON — 2350.0W
+```
+
+---
+
+### **Engineering Best Practices Embedded Here:**
+
+| Feature | Why It's Critical |
+|---------|-----------------|
+| **Optocoupler isolation** | Prevents ESP32 from being fried by AC mains back-EMF spikes |
+| **Active-LOW logic** | Safe default on firmware crash — loads stay powered |
+| **10-second confirmation** | Blocks false trips from motor inrush currents (~1-2s) |
+| **30-second cooldown** | Prevents relay mechanical chatter and wear |
+| **Priority ordering** | Sheds least critical loads first (AC before heater before lighting) |
+| **Zone 3 exclusion** | Never auto-trip essential circuits (phones, computers, medical devices) |
+| **Manual override flag** | Dashboard commands take precedence over auto-logic |
+| **Non-blocking loop** | PZEM reads never miss; Firebase timeouts don't block relay logic |
+| **Event logging** | Every trip is logged to /events node for auditing |
+
+---
+
+Does this clarify the **complete relay switching flow** — from the GPIO pin flip all the way through to the dashboard event log? Would you like me to dive deeper into any specific part?
