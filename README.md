@@ -199,6 +199,26 @@ Modify `src/pages/Dashboard.jsx` to adjust warning limits for power consumption.
 ### Changing Alert Colors
 Update Tailwind color classes in component files to match your branding.
 
+## Firmware Provisioning and Token Exchange
+
+See `docs/firmware_provisioning.md` for full local build and provisioning
+instructions. Highlights:
+
+- Create a non-committed `firmware/config.h` with `WIFI_SSID`,
+  `WIFI_PASSWORD`, `FB_API_KEY`, and either `FB_ROOT_CA_PEM` or
+  `FB_FINGERPRINT` (prefer `FB_ROOT_CA_PEM`).
+- Set `TOKEN_EXCHANGE_URL` and `DEVICE_PROVISION_KEY` for devices to
+  request short-lived tokens from the token-exchange service.
+- For production, replace the sample JWT issuer in `token_exchange/app.py`
+  with Firebase Admin SDK-issued ID tokens so devices receive Firebase
+  compatible ID tokens.
+- Never commit real secrets to the repository; use secret stores for CI
+  and provisioning workflows.
+
+If you plan to flash devices, compile and flash the `smart_energy_monitor.ino`
+sketch (see `firmware/config.h` template and `docs/firmware_provisioning.md`).
+
+
 ### Adding New Zones
 Edit the `zones` state in `src/pages/ControlPanel.jsx` to add more relay zones.
 
