@@ -26,6 +26,7 @@ import { useAlerts } from "../hooks/useAlerts";
 import { useDevice } from "../context/DeviceContext";
 
 import { formatUnit, numberValue, riskColorClass, statusLabel } from "../utils/formatters";
+import RealisticAiRecommendation from "../components/RealisticAiRecommendation";
 
 function buildChartData(history) {
   return history.map((row, index) => ({
@@ -247,6 +248,8 @@ export default function Dashboard() {
           <AlertTable alerts={alerts} />
         </aside>
       </section>
+    
+      <RealisticAiRecommendation />
     </main>
   );
 }

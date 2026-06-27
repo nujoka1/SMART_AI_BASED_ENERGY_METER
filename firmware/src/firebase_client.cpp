@@ -208,6 +208,8 @@ bool publishLiveReading(
   doc["ts"] = millis() / 1000;
 
   String payload;
+  doc["device_id"] = DEVICE_ID;
+  doc["serial_number"] = METER_SERIAL_NUMBER;
   serializeJson(doc, payload);
 
   String path = "/live/";
@@ -240,6 +242,8 @@ bool publishDeviceStatus(
   doc["last_seen"] = millis() / 1000;
 
   String payload;
+  doc["device_id"] = DEVICE_ID;
+  doc["serial_number"] = METER_SERIAL_NUMBER;
   serializeJson(doc, payload);
 
   String path = "/device_status/";
@@ -268,6 +272,8 @@ bool publishHistoryReading(const EnergyReading& reading) {
   doc["ts"] = millis() / 1000;
 
   String payload;
+  doc["device_id"] = DEVICE_ID;
+  doc["serial_number"] = METER_SERIAL_NUMBER;
   serializeJson(doc, payload);
 
   String path = "/history/";
@@ -303,6 +309,8 @@ bool publishAlert(
   doc["ts"] = millis() / 1000;
 
   String payload;
+  doc["device_id"] = DEVICE_ID;
+  doc["serial_number"] = METER_SERIAL_NUMBER;
   serializeJson(doc, payload);
 
   String path = "/alerts/";
