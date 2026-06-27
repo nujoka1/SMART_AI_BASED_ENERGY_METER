@@ -1,0 +1,29 @@
+services:
+  - type: worker
+    name: smart-ai-energy-engine
+    runtime: python
+    rootDir: ai-engine
+    buildCommand: pip install -r requirements.txt
+    startCommand: python ai_engine.py
+    autoDeploy: true
+    envVars:
+      - key: FIREBASE_API_KEY
+        sync: false
+      - key: FIREBASE_DATABASE_URL
+        sync: false
+      - key: FIREBASE_AUTH_EMAIL
+        sync: false
+      - key: FIREBASE_AUTH_PASSWORD
+        sync: false
+      - key: DEVICE_ID
+        value: esp32_energy_meter_01
+      - key: AI_POLL_INTERVAL
+        value: "10"
+      - key: AI_WRITE_INTERVAL
+        value: "30"
+      - key: AI_ANOMALY_THRESHOLD
+        value: "2.5"
+      - key: AI_PREPAID_UNITS_KWH
+        value: "55776"
+      - key: AI_LOG_LEVEL
+        value: INFO
