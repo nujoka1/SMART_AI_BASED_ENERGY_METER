@@ -1,0 +1,148 @@
+{
+  "version": "1.0.0",
+  "project": "Smart AI-Based Energy Meter",
+  "device_id": "esp32_energy_meter_01",
+  "paths": {
+    "live": {
+      "path": "/live/{deviceId}",
+      "writer": "ESP32 firmware",
+      "readers": [
+        "Web dashboard",
+        "Android app",
+        "AI engine"
+      ],
+      "description": "Latest real-time meter reading from the ESP32."
+    },
+    "history": {
+      "path": "/history/{deviceId}/{recordId}",
+      "writer": "ESP32 firmware",
+      "readers": [
+        "Web dashboard",
+        "Android app",
+        "AI engine"
+      ],
+      "description": "Periodic energy readings for charts, reports, and AI analysis."
+    },
+    "device_status": {
+      "path": "/device_status/{deviceId}",
+      "writer": "ESP32 firmware",
+      "readers": [
+        "Web dashboard",
+        "Android app",
+        "AI engine"
+      ],
+      "description": "Device heartbeat, WiFi state, firmware version, memory, and sensor state."
+    },
+    "alerts": {
+      "path": "/alerts/{deviceId}/{alertId}",
+      "writers": [
+        "ESP32 firmware",
+        "AI engine",
+        "Dashboard",
+        "Android app"
+      ],
+      "readers": [
+        "Web dashboard",
+        "Android app"
+      ],
+      "description": "Warnings, critical faults, and system notifications."
+    },
+    "ai_predictions": {
+      "path": "/ai_predictions/{deviceId}",
+      "writer": "AI engine",
+      "readers": [
+        "Web dashboard",
+        "Android app",
+        "ESP32 firmware"
+      ],
+      "description": "Latest AI risk level, usage classification, prediction, and recommendation."
+    },
+    "settings": {
+      "path": "/settings/{deviceId}",
+      "writers": [
+        "Dashboard",
+        "Android app",
+        "Admin setup"
+      ],
+      "readers": [
+        "ESP32 firmware",
+        "Web dashboard",
+        "Android app",
+        "AI engine"
+      ],
+      "description": "Thresholds, tariff settings, alert settings, and device configuration."
+    },
+    "daily_summary": {
+      "path": "/daily_summary/{deviceId}/{date}",
+      "writer": "AI engine",
+      "readers": [
+        "Web dashboard",
+        "Android app"
+      ],
+      "description": "Daily energy consumption summary."
+    },
+    "monthly_summary": {
+      "path": "/monthly_summary/{deviceId}/{month}",
+      "writer": "AI engine",
+      "readers": [
+        "Web dashboard",
+        "Android app"
+      ],
+      "description": "Monthly usage and billing summary."
+    },
+    "system_logs": {
+      "path": "/system_logs/{deviceId}/{logId}",
+      "writers": [
+        "ESP32 firmware",
+        "AI engine",
+        "Dashboard",
+        "Android app"
+      ],
+      "readers": [
+        "Dashboard",
+        "Android app"
+      ],
+      "description": "System events for debugging and audit trail."
+    }
+  },
+  "units": {
+    "voltage_v": "V",
+    "current_a": "A",
+    "power_w": "W",
+    "energy_kwh": "kWh",
+    "frequency_hz": "Hz",
+    "power_factor": "unitless",
+    "wifi_rssi": "dBm",
+    "uptime_s": "seconds",
+    "ts": "Unix timestamp in milliseconds"
+  },
+  "valid_ranges": {
+    "voltage_v": {
+      "min": 0,
+      "max": 300
+    },
+    "current_a": {
+      "min": 0,
+      "max": 100
+    },
+    "power_w": {
+      "min": 0,
+      "max": 30000
+    },
+    "energy_kwh": {
+      "min": 0
+    },
+    "frequency_hz": {
+      "min": 40,
+      "max": 70
+    },
+    "power_factor": {
+      "min": 0,
+      "max": 1
+    },
+    "wifi_rssi": {
+      "min": -100,
+      "max": 0
+    }
+  }
+}

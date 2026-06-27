@@ -1,0 +1,9 @@
+{
+  "device_id": "esp32_energy_meter_01",
+  "serial_number": "SEM-2026-0001",
+  "model": "Smart AI Energy Meter",
+  "active": true,
+  "claimed": false,
+  "location": "Main Test System",
+  "created_at": 1782353130
+}

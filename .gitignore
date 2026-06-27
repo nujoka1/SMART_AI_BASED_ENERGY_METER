@@ -1,0 +1,35 @@
+# Secrets
+.env
+*/.env
+dashboard/.env
+ai-engine/.env
+firmware/include/config.h
+
+# Node
+node_modules/
+dashboard/node_modules/
+android-app/node_modules/
+dist/
+dashboard/dist/
+
+# PlatformIO
+.pio/
+firmware/.pio/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.yoloenv/
+*.log
+
+# Android build outputs
+android-app/android/.gradle/
+android-app/android/app/build/
+*.apk
+*.aab
+
+# OS/editor
+.DS_Store
+Thumbs.db

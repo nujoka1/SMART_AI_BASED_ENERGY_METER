@@ -1,0 +1,9 @@
+{
+  "name": "Main Smart Energy Meter",
+  "display_name": "Main Smart Energy Meter",
+  "public_name": "Main Smart Energy Meter",
+  "location": "Main Test System",
+  "type": "single_phase_smart_energy_meter",
+  "model": "Smart AI Energy Meter",
+  "status": "active"
+}

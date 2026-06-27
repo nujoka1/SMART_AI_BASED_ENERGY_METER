@@ -1,0 +1,13 @@
+{
+  "appId": "com.nujoka.smartenergy",
+  "appName": "Smart AI Energy Meter",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": true
+  }
+}

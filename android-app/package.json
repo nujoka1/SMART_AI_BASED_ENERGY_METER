@@ -1,0 +1,21 @@
+{
+  "name": "smart-ai-energy-meter-android",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Android APK wrapper for Smart AI-Based Energy Meter dashboard",
+  "scripts": {
+    "build:web": "cd ../dashboard && npm install && npm run build",
+    "copy:web": "rm -rf www && mkdir -p www && cp -r ../dashboard/dist/* www/",
+    "prepare:web": "npm run build:web && npm run copy:web",
+    "android:add": "npx cap add android",
+    "android:sync": "npm run prepare:web && npx cap sync android",
+    "android:open": "npx cap open android",
+    "android:build": "cd android && ./gradlew assembleDebug",
+    "android:apk": "npm run android:sync && npm run android:build"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.0",
+    "@capacitor/cli": "^7.4.0",
+    "@capacitor/core": "^7.4.0"
+  }
+}
