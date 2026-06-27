@@ -1,0 +1,43 @@
+name: Smart Energy AI Engine
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+jobs:
+  run-ai-engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+
+    defaults:
+      run:
+        working-directory: ai-engine
+
+    env:
+      FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+      FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+      FIREBASE_AUTH_EMAIL: ${{ secrets.FIREBASE_AUTH_EMAIL }}
+      FIREBASE_AUTH_PASSWORD: ${{ secrets.FIREBASE_AUTH_PASSWORD }}
+      DEVICE_ID: esp32_energy_meter_01
+      AI_POLL_INTERVAL: "5"
+      AI_WRITE_INTERVAL: "10"
+      AI_ANOMALY_THRESHOLD: "2.5"
+      AI_PREPAID_UNITS_KWH: "55776"
+      AI_LOG_LEVEL: INFO
+      AI_RUN_ONCE: "true"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run AI engine once
+        run: python ai_engine.py

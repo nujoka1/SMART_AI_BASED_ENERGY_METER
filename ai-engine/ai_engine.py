@@ -160,4 +160,12 @@ class SmartEnergyAIEngine:
 
 if __name__ == "__main__":
     engine = SmartEnergyAIEngine()
-    engine.run_forever()
+
+    run_once = os.getenv("AI_RUN_ONCE", "false").lower() in ("1", "true", "yes")
+
+    if run_once:
+        print("[AI] Running once for scheduled cloud job...")
+        engine.run_once()
+        print("[AI] One-time run complete.")
+    else:
+        engine.run_forever()
